@@ -97,4 +97,52 @@ class MultiHeadedAttention(Model):
         outputs = tf.matmul(concatenated, self.W_o)
         
         return outputs
+   
+
+# Layer norm module
+class LayerNorm(Model):
+    def __init__(self):
+        super(LayerNorm, self).__init__()
+        
+    def call(self, X):
+        mu = tf.math.reduce_mean(X, axis=-1)
+        std = tf.math.reduce_std(X, axis=-1)
+        
+        mu = tf.expand_dims(mu, axis=2)
+        std = tf.expand_dims(std, axis=2)
+        
+        outputs = (X - mu) / std
+        
+        return outputs
+
+
+# Encoder sub-module
+class EncoderModule(Model):
+    def __init__(self, num_heads=8, d_model=128):
+        super(EncoderModule, self).__init__()
+        self.num_heads = num_heads
+        self.d_model = d_model
+        
+    def build(self, input_shape):
+        self.norm1 = LayerNorm()
+        self.mha = MultiHeadedAttention(num_heads=self.num_heads)
+        self.norm2 = LayerNorm()
+        self.mlp = Sequential([
+            Dense(self.d_model),
+            ReLU(),
+            Dense(self.d_model)
+        ])
+        
+    def call(self, X):
+        outputs = self.norm1(X)
+        outputs = self.mha(outputs)
+        outputs += X # Skip connection
+        
+        outputs = self.norm2(X)
+        outputs = self.mlp(outputs)
+        
+        return outputs
     
+encoder = EncoderModule(num_heads=8, d_model=128)
+X = tf.random.normal(shape=(16, 16, 128), dtype=tf.float32)
+print(encoder(X).shape)
