@@ -142,4 +142,58 @@ class EncoderModule(Model):
         outputs = self.mlp(outputs)
         
         return outputs
-    
+   
+
+# Complete ViT architecture for image recognition
+class TransformerEncoder(Model):
+    def __init__(self, L=8, num_attn_heads=8, d_model=128, batch_size=16, num_classes=2):
+        super(TransformerEncoder, self).__init__()
+        self.L = L
+        self.num_attn_heads = num_attn_heads
+        self.d_model = d_model
+        self.batch_size = batch_size 
+        self.num_classes = num_classes
+        
+    def build(self, input_shape):
+        self.linear_proj = self.add_weight(shape=(input_shape[-1], self.d_model),
+                                          initializer='identity',
+                                          trainable=True)
+        
+        self.cls_token = self.add_weight(shape=(1, self.d_model),
+                                        initializer='identity',
+                                        trainable=True,
+                                        name='Classification_Token')
+        
+        self.pos_emb = pos_embedding_matrix()
+        
+        # List of encoder modules
+        self.encoders = []
+        for i in range(self.L):
+            self.encoders.append(MultiHeadedAttention(num_heads=self.num_attn_heads,
+                                                     d_model=self.d_model))
+        
+        # MLP head
+        self.mlp = Sequential([
+            Dense(self.d_model // 2, activation='relu'),
+            Dense(self.d_model // 4, activation='relu'),
+            Dense(self.num_classes)
+        ])
+        
+    def call(self, X):
+        X = tf.matmul(X, self.linear_proj)
+        
+        # Concatenate inputs to cls token
+        cls_tokens = tf.tile(self.cls_token, (X.shape[0], 1))
+        cls_tokens = tf.expand_dims(cls_tokens, axis=1)
+        inputs = tf.concat([cls_tokens, X], axis=1)
+        
+        # Add positional embeddings
+        inputs += self.pos_emb
+        outputs = inputs 
+        for i in range(self.L):
+            outputs = self.encoders[i](outputs)
+            
+        # Only apply the MLP head on the CLS token
+        outputs = self.mlp(outputs[:, 0])
+        
+        return outputs
