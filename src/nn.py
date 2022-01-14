@@ -65,5 +65,36 @@ class SelfAttention(Model):
         outputs = tf.matmul(scores, V)
         
         return outputs
-    
+   
 
+# Multi-headed attention module
+class MultiHeadedAttention(Model):
+    def __init__(self, num_heads=8, d_model=128):
+        super(MultiHeadedAttention, self).__init__()
+        self.num_heads = num_heads
+        self.d_model = d_model
+        
+    def build(self, input_shape):
+        self.W_o = self.add_weight(shape=(self.d_model * self.num_heads, self.d_model),
+                                  initializer='identity',
+                                  trainable=True)
+        
+        self.heads = []
+        for i in range(self.num_heads):
+            self.heads.append(SelfAttention(d_model=self.d_model))
+        
+    def call(self, X):
+        concatenated = None
+        
+        for i in range(self.num_heads):
+            output = self.heads[i](X)
+            
+            if(concatenated is None):
+                concatenated = output 
+            else:
+                concatenated = tf.concat([concatenated, output], axis=-1)
+        
+        outputs = tf.matmul(concatenated, self.W_o)
+        
+        return outputs
+    
