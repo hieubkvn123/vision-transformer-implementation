@@ -44,7 +44,7 @@ class DataLoader:
         
         
     def parse_dataset(self):
-        all_imgs = glob.glob(os.path.join(data_dir, "*", "*.jpg"))
+        all_imgs = glob.glob(os.path.join(self.directory, "*", "*.jpg"))
         
         img_paths = []
         img_labels = []
@@ -117,7 +117,7 @@ class DataLoader:
         )
         
         patch_dims = patches.shape[-1]
-        patches = tf.reshape(patches, [batch_size, -1, patch_dims])
+        patches = tf.reshape(patches, [self.batch_size, -1, patch_dims])
         
         return images, patches, labels
 

@@ -5,6 +5,8 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 
+from dataloader import DataLoader
+
 ### Tensorflow dependecies ### 
 import tensorflow as tf
 from tensorflow.keras.layers import *
