@@ -143,6 +143,3 @@ class EncoderModule(Model):
         
         return outputs
     
-encoder = EncoderModule(num_heads=8, d_model=128)
-X = tf.random.normal(shape=(16, 16, 128), dtype=tf.float32)
-print(encoder(X).shape)
