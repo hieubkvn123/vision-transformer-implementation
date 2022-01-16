@@ -1,0 +1,27 @@
+{
+    "os": "Linux-5.11.0-43-generic-x86_64-with-glibc2.29",
+    "python": "3.8.10",
+    "heartbeatAt": "2022-01-16T07:24:12.740393",
+    "startedAt": "2022-01-16T07:24:10.750964",
+    "docker": null,
+    "gpu": "GeForce RTX 2080 Ti",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "cuda": null,
+    "args": [
+        "--run_name",
+        "default_settings_test"
+    ],
+    "state": "running",
+    "program": "main.py",
+    "codePath": "src/main.py",
+    "git": {
+        "remote": "https://github.com/hieubkvn123/vision-transformer-implementation",
+        "commit": "9a29b8f71f0c1f07315dfcda19a67d4ae0a25e8e"
+    },
+    "email": "hieubkvn123@gmail.com",
+    "root": "/home/minhhieu/Desktop/Hieu/vision-transformer-implementation",
+    "host": "minhhieu-Z490-GAMING-X",
+    "username": "minhhieu",
+    "executable": "/usr/bin/python3"
+}
