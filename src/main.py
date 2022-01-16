@@ -13,7 +13,7 @@ def main(opt):
 
     train(model, opt['data_dir'], batch_size=opt['batch_size'],
           d_model=opt['d_model'], img_size=opt['img_size'], epochs=opt['epochs'],
-          lr=opt['lr'], wandb_log=wandb_log)
+          lr=opt['lr'], wandb_log=wandb_log, wandb_run_name=opt['run_name'])
 
 if __name__ == '__main__':
     parser = ArgumentParser()
@@ -26,6 +26,7 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', required=False, default=100, help='Number of training iterations')
     parser.add_argument('--lr', required=False, default=0.0001, help='Learning rate')
     parser.add_argument('--no_wandb', action='store_true', help='Whether to log training info online to wandb or offline')
+    parser.add_argument('--run_name', required=False, default=None, help='Wandb run id/name')
 
     opt = vars(parser.parse_args())
     

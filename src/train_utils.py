@@ -3,6 +3,7 @@ import glob
 import tqdm
 import time
 import wandb
+import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -39,7 +40,13 @@ def val_step(model, patches, labels):
     
     return tf.reduce_mean(loss), tf.reduce_mean(accuracy)
     
-def train(model, data_dir, batch_size=16, d_model=128, img_size=64, num_classes=2, epochs=100, lr=0.0001, wandb_log=None):
+def get_wandb_runname():
+    now = datetime.datetime.now()
+    return f'ViT_{now.year}.{now.month}.{now.day}_{now.hour}.{now.minute}'
+
+
+def train(model, data_dir, batch_size=16, d_model=128, img_size=64, num_classes=2, epochs=100, lr=0.0001, 
+          wandb_log=None, wandb_run_name=None):
     bce = tf.keras.losses.BinaryCrossentropy()
     acc = tf.keras.metrics.Accuracy()
     opt = tf.keras.optimizers.Adam(lr=lr, amsgrad=True)
@@ -54,7 +61,10 @@ def train(model, data_dir, batch_size=16, d_model=128, img_size=64, num_classes=
     
     # Initialize wandb 
     if(wandb_log is not None):
-        wandb.init(project=wandb_log['project'], entity=wandb_log['entity'])
+        if(wandb_run_name is None):
+            wandb_run_name = get_wandb_runname()
+
+        wandb.init(id=wandb_run_name, project=wandb_log['project'], entity=wandb_log['entity'])
         wandb.config.update({
             'd_model' : d_model,
             'img_size' : img_size, 

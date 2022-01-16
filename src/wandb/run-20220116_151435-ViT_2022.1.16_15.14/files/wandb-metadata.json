@@ -1,0 +1,22 @@
+{
+    "os": "Linux-5.11.0-46-generic-x86_64-with-glibc2.29",
+    "python": "3.8.10",
+    "heartbeatAt": "2022-01-16T07:14:40.066595",
+    "startedAt": "2022-01-16T07:14:35.464869",
+    "docker": null,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "main.py",
+    "codePath": "src/main.py",
+    "git": {
+        "remote": "https://github.com/hieubkvn123/vision-transformer-implementation.git",
+        "commit": "f0757b350f5f72b8081adbce3b60df0ff2c2dedd"
+    },
+    "email": "javapythonscala@gmail.com",
+    "root": "/home/hieu/Desktop/Hieu/Python/git/vision-transformer-implementation",
+    "host": "hieu-ubuntu",
+    "username": "hieu",
+    "executable": "/usr/bin/python3"
+}

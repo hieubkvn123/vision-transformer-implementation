@@ -23,6 +23,7 @@ parser.add_argument('--batch_size', required=False, default=16, help='Training a
 parser.add_argument('--epochs', required=False, default=100, help='Number of training iterations')
 parser.add_argument('--lr', required=False, default=0.0001, help='Learning rate')
 parser.add_argument('--no_wandb', action='store_true', help='Whether to log training info online to wandb or offline')
+parser.add_argument('--run_name', required=False, default=None, help='Wandb run id/name')
 ```
 
 By default the training logs will be exported to wandb. To change your own wandb project, modify the src/wandb_conf.py file
